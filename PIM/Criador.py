@@ -10,6 +10,18 @@ cursor = con.cursor()
 
 # definição de classes para facilitar a criação de dados para preencher as tabelas -------------------------------------------
 
+# classe "Administrador"
+
+class Administrador:
+    login = ""
+    senha = ""
+    nome = ""
+
+    def __init__(self, login, senha, nome):
+        self.login = login
+        self.senha = senha
+        self.nome = nome
+
 # classe "Aluno"
 
 class Aluno:
@@ -36,11 +48,22 @@ class Turma:
 
 # Comando que eu uso para deletar os dados das tabelas para testes, True = deletar -------------------------------------------
 
-if True:
+if False:
+    cursor.execute('DROP TABLE administrador')
     cursor.execute('DROP TABLE alunos')
     cursor.execute('DROP TABLE turmas')
 
 # criação das tabelas no banco de dados --------------------------------------------------------------------------------------
+
+# tabela "administrador"
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS administrador
+    (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    login TEXT,
+    senha TEXT,
+    nome TEXT)
+    ''')
 
 # tabela "alunos" 
 
@@ -65,9 +88,23 @@ CREATE TABLE IF NOT EXISTS turmas
 
 # trecho que verifica se as tabelas já tem dados, para não preencher duas vezes --------------------------------------------
 
+adm_vazia = (cursor.execute('SELECT * FROM administrador LIMIT 1').fetchone() == None)
 alunos_vazia = (cursor.execute('SELECT * FROM alunos LIMIT 1').fetchone() == None)
-
 turmas_vazia = (cursor.execute('SELECT * FROM turmas LIMIT 1').fetchone() == None)
+
+# criação de administradores -----------------------------------------------------------------------------------------------
+
+if adm_vazia:
+    adms = list()
+
+    adms.append(Administrador("ADM1234", "123senha", "ademir"))
+    adms.append(Administrador("ADM9876", "password", "ademilson"))
+
+    # inserção dos adms na tabela
+
+    for adm in adms:
+        cursor.execute('INSERT INTO administrador (login, senha, nome) VALUES (?, ?, ?)', (adm.login, adm.senha, adm.nome))
+
 
 # criação de alunos de exemplo ---------------------------------------------------------------------------------------------
 
