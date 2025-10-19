@@ -1,38 +1,7 @@
 import customtkinter as ctk
 from tkinter import ttk, messagebox
-import sqlite3
 
-
-# banco de dados
-
-
-def criar_banco():
-    con = sqlite3.connect("cadastro.db")
-    cursor = con.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS alunos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT,
-            ra INTEGER,
-            curso TEXT,
-            senha TEXT
-        )
-    ''')
-    con.commit()
-    con.close()
-
-def validar_login_aluno(ra, senha):
-    con = sqlite3.connect('cadastro.db')
-    cursor = con.cursor()
-    cursor.execute('SELECT senha FROM alunos WHERE ra = ?', (ra,))
-    aluno = cursor.fetchone()
-    con.close()
-
-    if aluno and aluno[0] == senha:
-        return True
-    else:
-        return False
-
+import Main
 
 # interface gráfica
 
@@ -45,7 +14,6 @@ class SistemaEscolar(ctk.CTk):
         self.title("Sistema Escolar")
         self.geometry("500x450")
         self.resizable(False, False)
-        criar_banco()
         self.tela_inicial()
 
     # tela inicial
@@ -98,7 +66,7 @@ class SistemaEscolar(ctk.CTk):
             messagebox.showwarning("Aviso", "Preencha todos os campos!")
             return
 
-        if validar_login_aluno(ra, senha):
+        if Main.login_aluno(ra, senha):
             self.tela_aluno()
         else:
             messagebox.showerror("Erro", "RA ou senha inválidos!")
@@ -130,14 +98,21 @@ class SistemaEscolar(ctk.CTk):
         botoes_frame = ctk.CTkFrame(frame, fg_color="transparent")
         botoes_frame.pack(pady=10)
         
-        ctk.CTkButton(botoes_frame, text="Entrar", command=self.login_admin, width=120, height=35, fg_color="#1976D2").grid(row=0, column=0, padx=5)
+        ctk.CTkButton(botoes_frame, text="Entrar", command=self.login_adm, width=120, height=35, fg_color="#1976D2").grid(row=0, column=0, padx=5)
         ctk.CTkButton(frame, text="Voltar", command=self.tela_inicial, width=100, height=35, fg_color="#555").pack(pady=10)
 
-    def login_admin(self):
-        if self.login_entry.get() == "admin" and self.senha_entry.get() == "1234":
+    def login_adm(self):
+        login = self.login_entry.get().strip()
+        senha = self.senha_entry.get().strip()
+
+        if not login or not senha:
+            messagebox.showwarning("Aviso", "Preencha todos os campos!")
+            return
+
+        if Main.login_adm(login, senha):
             self.tela_admin_menu()
         else:
-            messagebox.showerror("Erro", "Login ou senha inválidos!")
+            messagebox.showerror("Erro", "login ou senha inválidos!")
 
     # menu para administrar
     def tela_admin_menu(self):
