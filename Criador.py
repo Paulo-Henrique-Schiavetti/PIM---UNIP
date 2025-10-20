@@ -97,7 +97,7 @@ turmas_vazia = (cursor.execute('SELECT * FROM turmas LIMIT 1').fetchone() == Non
 if adm_vazia:
     adms = list()
 
-    adms.append(Administrador("ADM1234", "123senha", "ademir"))
+    adms.append(Administrador("adm123", "adm123", "ademir"))
     adms.append(Administrador("ADM9876", "password", "ademilson"))
 
     # inserção dos adms na tabela

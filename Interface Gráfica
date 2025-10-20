@@ -12,7 +12,7 @@ class SistemaEscolar(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Sistema Escolar")
-        self.geometry("500x450")
+        self.geometry("800x600")
         self.resizable(False, False)
         self.tela_inicial()
 
@@ -22,19 +22,21 @@ class SistemaEscolar(ctk.CTk):
         frame = ctk.CTkFrame(self, fg_color="white")
         frame.pack(expand=True, fill="both")
 
-        titulo = ctk.CTkLabel(frame, text="Sistema de cadastro de alunos e turmas", 
-                            font=ctk.CTkFont(size=16, weight="normal"), text_color="black")
-        titulo.pack(pady=(40, 50))
+        frame_titulo = ctk.CTkFrame(frame, fg_color="#000085")
+        frame_titulo.pack(fill="both")
 
-        botoes_frame = ctk.CTkFrame(frame, fg_color="white")
+        titulo = ctk.CTkLabel(frame_titulo, text="Sistema de cadastro de alunos e turmas", font=ctk.CTkFont(size=24, weight="bold"), text_color="white")
+        titulo.pack(pady=20)
+
+        ctk.CTkLabel(frame, text="").pack(pady=10)
+
+        botoes_frame = ctk.CTkFrame(frame, fg_color="transparent")
         botoes_frame.pack()
 
-        btn_aluno = ctk.CTkButton(botoes_frame, text="ÁREA DO ALUNO", command=self.tela_login_aluno,
-                                width=220, height=40, corner_radius=8, fg_color="#1976D2", text_color="white")
+        btn_aluno = ctk.CTkButton(botoes_frame, text="ÁREA DO ALUNO", command=self.tela_login_aluno, width=400, height=60, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_aluno.pack(pady=10)
 
-        btn_admin = ctk.CTkButton(botoes_frame, text="ÁREA DOS ADMINISTRADORES", command=self.tela_login_admin,
-                                width=220, height=40, corner_radius=8, fg_color="#1976D2", text_color="white")
+        btn_admin = ctk.CTkButton(botoes_frame, text="ÁREA DO ADMINISTRADOR", command=self.tela_login_admin, width=400, height=60, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_admin.pack(pady=10)
 
     # tela do login aluno
@@ -43,20 +45,20 @@ class SistemaEscolar(ctk.CTk):
         frame = ctk.CTkFrame(self)
         frame.pack(expand=True, fill="both", padx=10, pady=10)
 
-        ctk.CTkLabel(frame, text="ÁREA DO ALUNO", font=ctk.CTkFont(size=18, weight="normal")).pack(pady=(30, 10))
-        ctk.CTkLabel(frame, text="Entre com o seu RA e senha:", font=ctk.CTkFont(size=14)).pack(pady=(0, 20))
+        frame_titulo = ctk.CTkFrame(frame, fg_color="#000085")
+        frame_titulo.pack(fill="both")
 
-        form = ctk.CTkFrame(frame, fg_color="transparent")
-        form.pack()
+        ctk.CTkLabel(frame_titulo, text="ÁREA DO ALUNO", font=ctk.CTkFont(size=16, weight="bold"), text_color="white").pack(pady=20)
+
+        form = ctk.CTkFrame(frame)
+        form.pack(pady=10)
 
         campo_ra = self.criar_campo(form, "RA:", 0)
         campo_senha = self.criar_campo(form, "Senha:", 1, senha=True)
-
-        botoes_frame = ctk.CTkFrame(frame, fg_color="transparent")
-        botoes_frame.pack(pady=20)
         
-        ctk.CTkButton(botoes_frame, text="Entrar", command=lambda: self.login_aluno(campo_ra.get().strip(), campo_senha.get().strip()), width=120, height=35, fg_color="#1976D2").grid(row=0, column=0, padx=5)
-        ctk.CTkButton(frame, text="Voltar", command=self.tela_inicial, width=100, height=35, fg_color="#1976D2").pack()
+        ctk.CTkButton(frame, text="Entrar", command=lambda: self.login_aluno(campo_ra.get().strip(), campo_senha.get().strip()), width=120, height=35, font=ctk.CTkFont(size=16, weight="bold"), fg_color="#1976D2").pack()
+
+        ctk.CTkButton(frame, text="Voltar", command=self.tela_inicial, width=120, height=35, font=ctk.CTkFont(size=16, weight="bold"), fg_color="#1976D2").pack(pady=20)
 
     def login_aluno(self, ra, senha):
 
@@ -75,12 +77,18 @@ class SistemaEscolar(ctk.CTk):
         frame = ctk.CTkFrame(self)
         frame.pack(expand=True, fill="both", padx=10, pady=10)
 
-        ctk.CTkLabel(frame, text="Área do Aluno", font=ctk.CTkFont(size=18, weight="normal")).pack(pady=10)
+        frame_titulo = ctk.CTkFrame(frame, fg_color="#000085")
+        frame_titulo.pack(fill="both")
+
+        ctk.CTkLabel(frame_titulo, text="ÁREA DO ALUNO", font=ctk.CTkFont(size=16, weight="bold"), text_color="white").pack(pady=20)
+
+        frame_corpo = ctk.CTkFrame(frame)
+        frame_corpo.pack(fill="both", pady=10)
 
         texto = f"nome: {Main.usuario['nome']} \n RA: {Main.usuario['login']} \n turma: {Main.usuario['nome_turma']} - {Main.usuario['ano_turma']}"
-        ctk.CTkLabel(frame, text=texto).pack(pady=10)
+        ctk.CTkLabel(frame_corpo, text=texto).pack(pady=10)
 
-        ctk.CTkButton(frame, text="Voltar", command=self.tela_inicial, width=100, height=35, fg_color="#555").pack(pady=20)
+        ctk.CTkButton(frame, text="SAIR", command=self.tela_inicial, width=100, height=35, font=ctk.CTkFont(size=16, weight="bold")).pack(pady=20)
 
     # login administrador
     def tela_login_admin(self):
@@ -88,19 +96,20 @@ class SistemaEscolar(ctk.CTk):
         frame = ctk.CTkFrame(self)
         frame.pack(expand=True, fill="both", padx=10, pady=10)
 
-        ctk.CTkLabel(frame, text="Login Administrador", font=ctk.CTkFont(size=18, weight="normal")).pack(pady=10)
+        frame_titulo = ctk.CTkFrame(frame, fg_color="#000085")
+        frame_titulo.pack(fill="both")
+
+        ctk.CTkLabel(frame_titulo, text="ÁREA DO ADMINISTRADOR", font=ctk.CTkFont(size=16, weight="bold"), text_color="white").pack(pady=20)
 
         form = ctk.CTkFrame(frame)
         form.pack(pady=10)
 
         campo_login = self.criar_campo(form, "Login:", 0)
         campo_senha = self.criar_campo(form, "Senha:", 1, senha=True)
-
-        botoes_frame = ctk.CTkFrame(frame, fg_color="transparent")
-        botoes_frame.pack(pady=10)
         
-        ctk.CTkButton(botoes_frame, text="Entrar", command=lambda: self.login_adm(campo_login.get().strip(), campo_senha.get().strip()), width=120, height=35, fg_color="#1976D2").grid(row=0, column=0, padx=5)
-        ctk.CTkButton(frame, text="Voltar", command=self.tela_inicial, width=100, height=35, fg_color="#1976D2").pack(pady=10)
+        ctk.CTkButton(frame, text="Entrar", command=lambda: self.login_adm(campo_login.get().strip(), campo_senha.get().strip()), width=120, height=35, font=ctk.CTkFont(size=16, weight="bold"), fg_color="#1976D2").pack()
+
+        ctk.CTkButton(frame, text="Voltar", command=self.tela_inicial, width=120, height=35, font=ctk.CTkFont(size=16, weight="bold"), fg_color="#1976D2").pack(pady=20)
 
     def login_adm(self, login, senha):
 
@@ -119,52 +128,58 @@ class SistemaEscolar(ctk.CTk):
         frame = ctk.CTkFrame(self)
         frame.pack(expand=True, fill="both", padx=10, pady=10)
 
-        # titulo
-        ctk.CTkLabel(frame, text="ÁREA DOS ADMINISTRADORES", font=ctk.CTkFont(size=18, weight="bold")).pack(pady=(20, 30))
+        frame_titulo = ctk.CTkFrame(frame, fg_color="#000085")
+        frame_titulo.pack(fill="both")
+
+        ctk.CTkLabel(frame_titulo, text="ÁREA DO ADMINISTRADOR", font=ctk.CTkFont(size=16, weight="bold"), text_color="white").pack(pady=20)
 
         # opções
         menu_frame = ctk.CTkFrame(frame, fg_color="transparent")
         menu_frame.pack(pady=10)
 
-        btn_cad_aluno = ctk.CTkButton(menu_frame, text="CADASTRAR ALUNO", command=self.tela_acessar_alunos, width=220, height=40, corner_radius=8, fg_color="#1976D2", text_color="white", font=ctk.CTkFont(size=13))
+        btn_cad_aluno = ctk.CTkButton(menu_frame, text="CADASTRAR ALUNO", command=self.tela_acessar_alunos, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_cad_aluno.pack(pady=8)
 
-        btn_ac_aluno = ctk.CTkButton(menu_frame, text="ACESSAR ALUNOS", command=self.tela_acessar_alunos, width=220, height=40, corner_radius=8, fg_color="#1976D2", text_color="white", font=ctk.CTkFont(size=13))
+        btn_ac_aluno = ctk.CTkButton(menu_frame, text="ACESSAR ALUNOS", command=self.tela_acessar_alunos, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_ac_aluno.pack(pady=8)
 
-        btn_cad_turma = ctk.CTkButton(menu_frame, text="CADASTRAR TURMA", command=self.tela_acessar_alunos, width=220, height=40, corner_radius=8, fg_color="#1976D2", text_color="white", font=ctk.CTkFont(size=13))
+        btn_cad_turma = ctk.CTkButton(menu_frame, text="CADASTRAR TURMA", command=self.tela_acessar_alunos, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_cad_turma.pack(pady=8)
 
-        btn_ac_turma = ctk.CTkButton(menu_frame, text="ACESSAR TURMAS", command=self.tela_acessar_alunos, width=220, height=40, corner_radius=8, fg_color="#1976D2", text_color="white", font=ctk.CTkFont(size=13))
+        btn_ac_turma = ctk.CTkButton(menu_frame, text="ACESSAR TURMAS", command=self.tela_acessar_alunos, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_ac_turma.pack(pady=8)
 
         # espaço do botão de sair
         ctk.CTkLabel(frame, text="", height=15).pack()
 
         # botão de sair(caso queira mudar a cor so alterar o fg_color)
-        ctk.CTkButton(frame, text="SAIR", command=self.tela_inicial, width=220, height=40, corner_radius=8, fg_color="#1976D2", text_color="white", font=ctk.CTkFont(size=13, weight="normal")).pack(pady=5)
+        ctk.CTkButton(frame, text="SAIR", command=self.tela_inicial, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white").pack()
     
     def tela_acessar_alunos(self):
         self.limpar_tela()
         frame = ctk.CTkFrame(self)
         frame.pack(expand=True, fill="both", padx=10, pady=10)
 
-        # titulo
-        ctk.CTkLabel(frame, text="ÁREA DOS ADMINISTRADORES", font=ctk.CTkFont(size=18, weight="bold")).pack(pady=(20, 30))
+        frame_titulo = ctk.CTkFrame(frame, fg_color="#000085")
+        frame_titulo.pack(fill="both")
+
+        ctk.CTkLabel(frame_titulo, text="ÁREA DO ADMINISTRADOR", font=ctk.CTkFont(size=16, weight="bold"), text_color="white").pack(pady=20)
+
+        ctk.CTkLabel(frame, text="PROCURAR ALUNO:", font=ctk.CTkFont(size=16, weight="bold")).pack(pady=10)
 
         # opções
-        menu_frame = ctk.CTkFrame(frame, fg_color="transparent")
+        menu_frame = ctk.CTkFrame(frame)
         menu_frame.pack(pady=10)
 
         campo_ra = self.criar_campo(menu_frame, "RA:", 0)
 
-        ctk.CTkButton(menu_frame, text="ACESSAR", command=lambda: self.acessar_aluno(campo_ra.get().strip()), width=120, height=35, fg_color="#1976D2").grid(row=0, column=0, padx=5)
+        ctk.CTkButton(frame, text="ACESSAR", command=lambda: self.acessar_aluno(campo_ra.get().strip()), width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), fg_color="#1976D2", text_color="white").pack()
 
         # espaço do botão de sair
         ctk.CTkLabel(frame, text="", height=15).pack()
 
         # botão de sair(caso queira mudar a cor so alterar o fg_color)
-        ctk.CTkButton(frame, text="SAIR", command=self.tela_admin_menu, width=220, height=40, corner_radius=8, fg_color="#1976D2", text_color="white", font=ctk.CTkFont(size=13, weight="normal")).pack(pady=5)
+        ctk.CTkButton(frame, text="SAIR", command=self.tela_admin_menu, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white").pack()
 
     def acessar_aluno(self, ra):
         if Main.procurar_aluno(ra):
@@ -177,24 +192,27 @@ class SistemaEscolar(ctk.CTk):
         frame = ctk.CTkFrame(self)
         frame.pack(expand=True, fill="both", padx=10, pady=10)
 
-        # titulo
-        ctk.CTkLabel(frame, text="ÁREA DOS ADMINISTRADORES", font=ctk.CTkFont(size=18, weight="bold")).pack(pady=(20, 30))
+        frame_titulo = ctk.CTkFrame(frame, fg_color="#000085")
+        frame_titulo.pack(fill="both")
+
+        ctk.CTkLabel(frame_titulo, text="ÁREA DO ADMINISTRADOR", font=ctk.CTkFont(size=16, weight="bold"), text_color="white").pack(pady=20)
 
         
-        menu_frame = ctk.CTkFrame(frame, fg_color="transparent")
-        menu_frame.pack(pady=10)
+        frame_corpo = ctk.CTkFrame(frame)
+        frame_corpo.pack(fill="both", pady=10)
 
         texto = f"nome: {Main.aluno_selecionado['nome']} \n RA: {Main.aluno_selecionado['ra']} \n turma: {Main.aluno_selecionado['nome_turma']} - {Main.aluno_selecionado['ano_turma']}"
-        ctk.CTkLabel(menu_frame, text=texto, font=ctk.CTkFont(size=14)).pack(pady=(0, 20))
+        ctk.CTkLabel(frame_corpo, text=texto, font=ctk.CTkFont(size=14)).pack(pady=10)
 
-        ctk.CTkButton(menu_frame, text="EDITAR DADOS", command=self.editar_aluno, width=220, height=40, corner_radius=8, fg_color="#005D08", text_color="white", font=ctk.CTkFont(size=13, weight="normal")).pack(pady=5)
-        ctk.CTkButton(frame, text="EXCLUIR ALUNO", command=self.excluir_aluno, width=220, height=40, corner_radius=8, fg_color="#D32F2F", text_color="white", font=ctk.CTkFont(size=13, weight="normal")).pack(pady=5)
+        ctk.CTkButton(frame, text="EDITAR DADOS", command=self.editar_aluno, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#005D08", text_color="white").pack(pady=5)
+        
+        ctk.CTkButton(frame, text="EXCLUIR ALUNO", command=self.excluir_aluno, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#D32F2F", text_color="white").pack(pady=5)
 
         # espaço do botão de sair
         ctk.CTkLabel(frame, text="", height=15).pack()
 
         # botão de sair(caso queira mudar a cor so alterar o fg_color)
-        ctk.CTkButton(frame, text="SAIR", command=self.tela_admin_menu, width=220, height=40, corner_radius=8, fg_color="#1976D2", text_color="white", font=ctk.CTkFont(size=13, weight="normal")).pack(pady=5)
+        ctk.CTkButton(frame, text="SAIR", command=self.tela_admin_menu, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white").pack()
 
     def editar_aluno(self):
         return 0
@@ -208,7 +226,7 @@ class SistemaEscolar(ctk.CTk):
             widget.destroy()
 
     def criar_campo(self, pai, texto, linha, senha=False):
-        ctk.CTkLabel(pai, text=texto).grid(row=linha, column=0, padx=5, pady=5, sticky="e")
+        ctk.CTkLabel(pai, text=texto, font=ctk.CTkFont(size=12, weight="bold")).grid(row=linha, column=0, padx=5, pady=5, sticky="e")
         entry = ctk.CTkEntry(pai, width=160, show="*" if senha else "")
         entry.grid(row=linha, column=1, padx=5, pady=5)
             
