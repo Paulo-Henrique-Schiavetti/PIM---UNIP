@@ -86,8 +86,8 @@ class SistemaEscolar(ctk.CTk):
         frame_corpo = ctk.CTkFrame(frame)
         frame_corpo.pack(fill="both", pady=10)
 
-        texto = f"nome: {Main.usuario['nome']} \n RA: {Main.usuario['login']} \n turma: {Main.usuario['nome_turma']} - {Main.usuario['ano_turma']}"
-        ctk.CTkLabel(frame_corpo, text=texto).pack(pady=10)
+        texto = f"nome: {Main.usuario['nome']} \n\n RA: {Main.usuario['login']} \n\n turma: {Main.usuario['nome_turma']} - {Main.usuario['ano_turma']}"
+        ctk.CTkLabel(frame_corpo, text=texto, font=ctk.CTkFont(size=16, weight="bold")).pack(pady=10)
 
         ctk.CTkButton(frame, text="SAIR", command=self.tela_inicial, width=100, height=35, font=ctk.CTkFont(size=16, weight="bold")).pack(pady=20)
 
@@ -139,20 +139,21 @@ class SistemaEscolar(ctk.CTk):
         menu_frame = ctk.CTkFrame(frame, fg_color="transparent")
         menu_frame.pack(pady=10)
 
-        btn_cad_aluno = ctk.CTkButton(menu_frame, text="CADASTRAR ALUNO", command=self.tela_cad_aluno, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
-        btn_cad_aluno.pack(pady=8)
-
         btn_ac_aluno = ctk.CTkButton(menu_frame, text="ACESSAR ALUNOS", command=self.tela_acessar_alunos, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_ac_aluno.pack(pady=8)
-
-        btn_cad_turma = ctk.CTkButton(menu_frame, text="CADASTRAR TURMA", command=self.tela_cad_turma, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
-        btn_cad_turma.pack(pady=8)
 
         btn_ac_turma = ctk.CTkButton(menu_frame, text="ACESSAR TURMAS", command=self.tela_acessar_turmas, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_ac_turma.pack(pady=8)
 
+        ctk.CTkLabel(menu_frame, text="", height=20).pack()
 
-        ctk.CTkLabel(frame, text="", height=15).pack()
+        btn_cad_aluno = ctk.CTkButton(menu_frame, text="CADASTRAR ALUNO", command=self.tela_cad_aluno, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
+        btn_cad_aluno.pack(pady=8)
+
+        btn_cad_turma = ctk.CTkButton(menu_frame, text="CADASTRAR TURMA", command=self.tela_cad_turma, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
+        btn_cad_turma.pack(pady=8)
+
+        ctk.CTkLabel(frame, text="", height=40).pack()
 
         # botão de sair
         ctk.CTkButton(frame, text="SAIR", command=self.tela_inicial, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white").pack()
@@ -252,8 +253,8 @@ class SistemaEscolar(ctk.CTk):
         frame_corpo = ctk.CTkFrame(frame)
         frame_corpo.pack(fill="both", pady=10)
 
-        texto = f"nome: {Main.aluno_selecionado['nome']} \n RA: {Main.aluno_selecionado['ra']} \n turma: {Main.aluno_selecionado['nome_turma']} - {Main.aluno_selecionado['ano_turma']}"
-        ctk.CTkLabel(frame_corpo, text=texto, font=ctk.CTkFont(size=14)).pack(pady=10)
+        texto = f"nome: {Main.aluno_selecionado['nome']} \n\n RA: {Main.aluno_selecionado['ra']} \n\n turma: {Main.aluno_selecionado['nome_turma']} - {Main.aluno_selecionado['ano_turma']}"
+        ctk.CTkLabel(frame_corpo, text=texto, font=ctk.CTkFont(size=14, weight="bold")).pack(pady=10)
 
         ctk.CTkButton(frame, text="EDITAR DADOS", command=self.tela_editar_aluno, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#005D08", text_color="white").pack(pady=5)
         
@@ -350,7 +351,7 @@ class SistemaEscolar(ctk.CTk):
 
         ctk.CTkLabel(frame, text="Lista completa:", font=ctk.CTkFont(size=16, weight="bold")).pack(pady=5)
 
-        lista_frame = ctk.CTkScrollableFrame(frame)
+        lista_frame = ctk.CTkScrollableFrame(frame, height=300)
         lista_frame.pack(fill="both", padx=20)
 
         lista_turmas = Main.listar_turmas()
