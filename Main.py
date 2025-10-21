@@ -3,12 +3,6 @@
 import sqlite3
 from fileinput import close
 
-# ENFEITES TEMPORARIOS
-
-texto1 = "-------------------------------------------\n | Sistema de cadastro de alunos e turmas |\n-------------------------------------------"
-texto2 = "------------------\n| Login do aluno |\n------------------\n"
-texto3 = "--------------------------\n| Login do administrador |--------------------------\n"
-
 # CONECTA AO BANCO DE DADOS
 
 con = sqlite3.connect('banco.db')
@@ -20,7 +14,6 @@ usuario = {'id': 0, 'is_adm': False, 'login': "", 'senha': "", 'nome': "", 'turm
 
 aluno_selecionado = {'id': 0, 'ra': "", 'senha': "", 'nome': "", 'turma': 0, 'nome_turma': "", 'ano_turma': 0}
 turma_selecionada = {'id': 0, 'nome_curso': "", 'ano_inicio': 0, 'alunos': ()}
-
 
 # FUNÇÕES DE LOGIN
 
