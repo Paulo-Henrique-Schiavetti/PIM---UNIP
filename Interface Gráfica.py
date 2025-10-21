@@ -39,6 +39,7 @@ class SistemaEscolar(ctk.CTk):
         btn_admin = ctk.CTkButton(botoes_frame, text="ÁREA DO ADMINISTRADOR", command=self.tela_login_admin, width=400, height=60, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_admin.pack(pady=10)
 
+    # ALUNO -----------------------------------------------------------------------------------------------------------------------------------
     # tela do login aluno ---------------------------------------------------------------------------------------------------------------------
     def tela_login_aluno(self):
         self.limpar_tela()
@@ -90,6 +91,7 @@ class SistemaEscolar(ctk.CTk):
 
         ctk.CTkButton(frame, text="SAIR", command=self.tela_inicial, width=100, height=35, font=ctk.CTkFont(size=16, weight="bold")).pack(pady=20)
 
+    # ADMINISTRADOR ---------------------------------------------------------------------------------------------------------------------------
     # login administrador ---------------------------------------------------------------------------------------------------------------------
     def tela_login_admin(self):
         self.limpar_tela()
@@ -143,10 +145,10 @@ class SistemaEscolar(ctk.CTk):
         btn_ac_aluno = ctk.CTkButton(menu_frame, text="ACESSAR ALUNOS", command=self.tela_acessar_alunos, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_ac_aluno.pack(pady=8)
 
-        btn_cad_turma = ctk.CTkButton(menu_frame, text="CADASTRAR TURMA", command=self.tela_acessar_alunos, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
+        btn_cad_turma = ctk.CTkButton(menu_frame, text="CADASTRAR TURMA", command=self.tela_cad_turma, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_cad_turma.pack(pady=8)
 
-        btn_ac_turma = ctk.CTkButton(menu_frame, text="ACESSAR TURMAS", command=self.tela_acessar_alunos, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
+        btn_ac_turma = ctk.CTkButton(menu_frame, text="ACESSAR TURMAS", command=self.tela_acessar_turmas, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white")
         btn_ac_turma.pack(pady=8)
 
 
@@ -155,6 +157,7 @@ class SistemaEscolar(ctk.CTk):
         # botão de sair
         ctk.CTkButton(frame, text="SAIR", command=self.tela_inicial, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white").pack()
     
+    # MANTER ALUNOS ---------------------------------------------------------------------------------------------------------------------------
     # tela de cadastrar alunos ----------------------------------------------------------------------------------------------------------------
     
     def tela_cad_aluno(self):
@@ -186,7 +189,7 @@ class SistemaEscolar(ctk.CTk):
     # cadastrar aluno
     def cad_aluno(self, ra, senha, nome, turma):
         Main.cadastrar_aluno(ra, senha, nome, turma)
-        self.tela_admin_menu()
+        self.exibir_aluno()
 
     # tela de acessar aluno -------------------------------------------------------------------------------------------------------------------
 
@@ -227,6 +230,7 @@ class SistemaEscolar(ctk.CTk):
         # botão de sair
         ctk.CTkButton(frame, text="SAIR", command=self.tela_admin_menu, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white").pack()
 
+    # acessar aluno
     def acessar_aluno(self, ra):
         if Main.procurar_aluno(ra):
             self.exibir_aluno()
@@ -260,7 +264,7 @@ class SistemaEscolar(ctk.CTk):
         # botão de sair
         ctk.CTkButton(frame, text="SAIR", command=self.tela_admin_menu, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white").pack()
 
-    # tela de manutenção de aluno --------------------------------------------------------------------------------------------------------------
+    # tela de editar aluno --------------------------------------------------------------------------------------------------------------------
 
     def tela_editar_aluno(self):
         self.limpar_tela()
@@ -295,12 +299,149 @@ class SistemaEscolar(ctk.CTk):
         if Main.editar_aluno(ra, senha, nome, turma):
             self.exibir_aluno()
 
-    # excluir aluno --------------------------------------------------------------------------------------------------------------------------
+    # excluir aluno
 
     def excluir_aluno(self):
         if Main.excluir_aluno():
             self.tela_admin_menu()
 
+    # MANTER TURMAS ----------------------------------------------------------------------------------------------------------------------------
+    # tela de cadastrar turmas -----------------------------------------------------------------------------------------------------------------
+
+    def tela_cad_turma(self):
+        self.limpar_tela()
+        frame = ctk.CTkFrame(self)
+        frame.pack(expand=True, fill="both", padx=10, pady=10)
+
+        frame_titulo = ctk.CTkFrame(frame, fg_color="#000085")
+        frame_titulo.pack(fill="both")
+
+        ctk.CTkLabel(frame_titulo, text="ÁREA DO ADMINISTRADOR", font=ctk.CTkFont(size=16, weight="bold"), text_color="white").pack(pady=20)
+
+        ctk.CTkLabel(frame, text="Cadastrar turma:", font=ctk.CTkFont(size=16, weight="bold")).pack(pady=5)
+
+        form = ctk.CTkFrame(frame)
+        form.pack(pady=10)
+
+        campo_nome = self.criar_campo(form, "Nome do curso:", 0)
+        campo_ano = self.criar_campo(form, "Ano de inicio:", 1)
+        
+        ctk.CTkButton(frame, text="Cadastrar", command=lambda: self.cad_turma(campo_nome.get().strip(), campo_ano.get().strip()), width=120, height=35, font=ctk.CTkFont(size=16, weight="bold"), fg_color="#1976D2").pack()
+
+        ctk.CTkLabel(frame, text="", height=15).pack()
+
+        ctk.CTkButton(frame, text="Voltar", command=self.tela_admin_menu, width=120, height=35, font=ctk.CTkFont(size=16, weight="bold"), fg_color="#1976D2").pack(pady=20)
+
+    # cadastrar turma
+    def cad_turma(self, nome, ano):
+        if Main.cadastrar_turma(nome, ano):
+            self.exibir_turma()
+
+    # tela de procurar turmas ------------------------------------------------------------------------------------------------------------------
+    def tela_acessar_turmas(self):
+        self.limpar_tela()
+        frame = ctk.CTkFrame(self)
+        frame.pack(expand=True, fill="both", padx=10, pady=10)
+
+        frame_titulo = ctk.CTkFrame(frame, fg_color="#000085")
+        frame_titulo.pack(fill="both")
+
+        ctk.CTkLabel(frame_titulo, text="ÁREA DO ADMINISTRADOR", font=ctk.CTkFont(size=16, weight="bold"), text_color="white").pack(pady=20)
+
+        ctk.CTkLabel(frame, text="Lista completa:", font=ctk.CTkFont(size=16, weight="bold")).pack(pady=5)
+
+        lista_frame = ctk.CTkScrollableFrame(frame)
+        lista_frame.pack(fill="both", padx=20)
+
+        lista_turmas = Main.listar_turmas()
+
+        for turma in lista_turmas:
+            texto = f"ID: {turma[0]} | {turma[1]} - {turma[2]}"
+            ctk.CTkButton(lista_frame, text=texto, command=lambda idturma=turma[0]: self.acessar_turma(idturma), font=ctk.CTkFont(size=16, weight="bold"), fg_color="#7A7A7A", text_color="white").pack(fill="both")
+            for aluno in turma[3]:
+                texto = f" {aluno[1]} | {aluno[3]}"
+                ctk.CTkLabel(lista_frame, text=texto, anchor="w", font=ctk.CTkFont(size=14, weight="bold"), fg_color="#969696", text_color="white").pack(fill="both")
+        
+        ctk.CTkLabel(frame, text="", height=15).pack()
+
+        # botão de sair
+        ctk.CTkButton(frame, text="SAIR", command=self.tela_admin_menu, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white").pack()
+
+    # acessar turma
+    def acessar_turma(self, idturma):
+        if Main.procurar_turma(idturma):
+            self.exibir_turma()
+    
+    # exibir turma ----------------------------------------------------------------------------------------------------------------------------
+
+    def exibir_turma(self):
+        self.limpar_tela()
+        frame = ctk.CTkFrame(self)
+        frame.pack(expand=True, fill="both", padx=10, pady=10)
+
+        frame_titulo = ctk.CTkFrame(frame, fg_color="#000085")
+        frame_titulo.pack(fill="both")
+
+        ctk.CTkLabel(frame_titulo, text="ÁREA DO ADMINISTRADOR", font=ctk.CTkFont(size=16, weight="bold"), text_color="white").pack(pady=20)
+        
+        frame_corpo = ctk.CTkFrame(frame)
+        frame_corpo.pack(fill="both", pady=10, padx=20)
+
+        texto = f" {Main.turma_selecionada['nome_curso']} - {Main.turma_selecionada['ano_inicio']}"
+        ctk.CTkLabel(frame_corpo, text=texto, font=ctk.CTkFont(size=16, weight="bold"), fg_color="#7A7A7A", text_color="white").pack(fill="both")
+
+        for aluno in Main.turma_selecionada['alunos']:
+            texto = f" {aluno[1]} | {aluno[3]}"
+            ctk.CTkLabel(frame_corpo, text=texto, anchor="w", font=ctk.CTkFont(size=14, weight="bold"), fg_color="#969696", text_color="white").pack(fill="both")
+
+        ctk.CTkButton(frame, text="EDITAR DADOS", command=self.tela_editar_turma, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#005D08", text_color="white").pack(pady=5)
+        
+        ctk.CTkButton(frame, text="EXCLUIR TURMA", command=self.excluir_turma, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#D32F2F", text_color="white").pack(pady=5)
+
+        ctk.CTkLabel(frame, text="", height=15).pack()
+
+        # botão de sair
+        ctk.CTkButton(frame, text="SAIR", command=self.tela_admin_menu, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white").pack()
+
+    # tela de editar turma ---------------------------------------------------------------------------------------------------------------------
+
+    def tela_editar_turma(self):
+        self.limpar_tela()
+        frame = ctk.CTkFrame(self)
+        frame.pack(expand=True, fill="both", padx=10, pady=10)
+
+        frame_titulo = ctk.CTkFrame(frame, fg_color="#000085")
+        frame_titulo.pack(fill="both")
+
+        ctk.CTkLabel(frame_titulo, text="ÁREA DO ADMINISTRADOR", font=ctk.CTkFont(size=16, weight="bold"), text_color="white").pack(pady=20)
+        
+        ctk.CTkLabel(frame, text="Editar dados:", font=ctk.CTkFont(size=16, weight="bold")).pack(pady=5)
+
+        form = ctk.CTkFrame(frame)
+        form.pack(pady=10)
+
+        campo_nome = self.criar_campo(form, "Nome do curso:", 0, Main.turma_selecionada["nome_curso"])
+        campo_ano = self.criar_campo(form, "Ano de inicio:", 1, Main.turma_selecionada["ano_inicio"])
+
+        ctk.CTkButton(frame, text="SALVAR DADOS EDITADOS", command=lambda: self.editar_turma(campo_nome.get().strip(), campo_ano.get().strip()), width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#005D08", text_color="white").pack(pady=5)
+
+        ctk.CTkLabel(frame, text="", height=15).pack()
+
+        # botão de sair
+        ctk.CTkButton(frame, text="VOLTAR", command=self.exibir_turma, width=220, height=40, font=ctk.CTkFont(size=16, weight="bold"), corner_radius=8, fg_color="#1976D2", text_color="white").pack()
+
+    
+    # editar turma
+    def editar_turma(self, nome, ano):
+        if Main.editar_turma(nome, ano):
+            self.exibir_turma()
+    
+    # excluir turma
+    def excluir_turma(self):
+        if Main.excluir_turma():
+            self.tela_admin_menu()
+
+    # OUTROS -----------------------------------------------------------------------------------------------------------------------------------
     # função limpar_tela e criar_campo  --------------------------------------------------------------------------------------------------------
 
     def limpar_tela(self):
