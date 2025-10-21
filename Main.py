@@ -53,7 +53,7 @@ def login_adm(login, senha):
             return False
         
 def cadastrar_aluno(ra, senha, nome, turma):
-    cursor.execute('INSERT INTO alunos (ra, senha, nome, turma) VALUES (?, ?, ?, ?)', (ra, senha, nome, turma))
+    cursor.execute('INSERT INTO alunos (ra, senha, nome, turma) VALUES (?, ?, ?, ?)', (ra, senha, nome, int(turma)))
     con.commit()
 
 def cadastrar_turma(nome, ano):
@@ -63,12 +63,12 @@ def cadastrar_turma(nome, ano):
 def procurar_aluno(ra):
     aluno = cursor.execute('SELECT * FROM alunos WHERE ra=?', (ra,)).fetchone()
     if aluno != None:
-        turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (aluno[4],)).fetchone()
         aluno_selecionado['id'] = aluno[0]
         aluno_selecionado['ra'] = aluno[1]
         aluno_selecionado['senha'] = aluno[2]
         aluno_selecionado['nome'] = aluno[3]
         aluno_selecionado['turma'] = aluno[4]
+        turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (aluno[4],)).fetchone()
         aluno_selecionado['nome_turma'] = turma[1]
         aluno_selecionado['ano_turma'] = turma[2]
         return True
@@ -96,6 +96,32 @@ def listar_alunos():
 def listar_turmas():
      turmas = cursor.execute('SELECT * FROM turmas').fetchall()
      return turmas
+
+def editar_aluno(ra, senha, nome, turma):
+    cursor.execute('UPDATE alunos SET ra=?, senha=?, nome=?, turma=? WHERE id=?', (ra, senha, nome, turma, aluno_selecionado["id"]))
+    aluno_selecionado['ra'] = ra
+    aluno_selecionado['senha'] = senha
+    aluno_selecionado['nome'] = nome
+    if turma != aluno_selecionado['turma']:
+        aluno_selecionado['turma'] = turma
+        nova_turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (turma,)).fetchone()
+        aluno_selecionado['nome_turma'] = nova_turma[1]
+        aluno_selecionado['ano_turma'] = nova_turma[2]
+    con.commit()
+    return True
+    
+def excluir_aluno():
+    cursor.execute('DELETE FROM alunos WHERE id=?', (aluno_selecionado["id"],))
+    aluno_selecionado['id'] = 0
+    aluno_selecionado['ra'] = ""
+    aluno_selecionado['senha'] = ""
+    aluno_selecionado['nome'] = ""
+    aluno_selecionado['turma'] = ""
+    aluno_selecionado['nome_turma'] = ""
+    aluno_selecionado['ano_turma'] = 0
+    con.commit()
+    return True
+
         
 def encerrar():
      con.commit()
