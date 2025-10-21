@@ -387,7 +387,7 @@ class SistemaEscolar(ctk.CTk):
         frame_corpo = ctk.CTkFrame(frame)
         frame_corpo.pack(fill="both", pady=10, padx=20)
 
-        texto = f" {Main.turma_selecionada['nome_curso']} - {Main.turma_selecionada['ano_inicio']}"
+        texto = f" ID: {Main.turma_selecionada['id']} | {Main.turma_selecionada['nome_curso']} - {Main.turma_selecionada['ano_inicio']}"
         ctk.CTkLabel(frame_corpo, text=texto, font=ctk.CTkFont(size=16, weight="bold"), fg_color="#7A7A7A", text_color="white").pack(fill="both")
 
         for aluno in Main.turma_selecionada['alunos']:

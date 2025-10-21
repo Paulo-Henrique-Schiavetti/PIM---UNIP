@@ -48,7 +48,7 @@ class Turma:
 
 # Comando que eu uso para deletar os dados das tabelas para testes, True = deletar -------------------------------------------
 
-if False:
+if True:
     cursor.execute('DROP TABLE administrador')
     cursor.execute('DROP TABLE alunos')
     cursor.execute('DROP TABLE turmas')

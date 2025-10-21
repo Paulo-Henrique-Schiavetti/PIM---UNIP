@@ -27,15 +27,19 @@ turma_selecionada = {'id': 0, 'nome_curso': "", 'ano_inicio': 0, 'alunos': ()}
 def login_aluno(ra, senha):
         aluno = cursor.execute('SELECT * FROM alunos WHERE ra=? AND senha=?', (ra, senha)).fetchone()
         if aluno != None:
-            turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (aluno[4],)).fetchone()
             usuario['id'] = aluno[0]
             usuario['is_adm'] = False
             usuario['login'] = aluno[1]
             usuario['senha'] = aluno[2]
             usuario['nome'] = aluno[3]
             usuario['turma'] = aluno[4]
-            usuario['nome_turma'] = turma[1]
-            usuario['ano_turma'] = turma[2]
+            if aluno[4]==0:
+                usuario['nome_turma'] = "SEM TURMA"
+                usuario['ano_turma'] = 0
+            else:
+                turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (aluno[4],)).fetchone()
+                usuario['nome_turma'] = turma[1]
+                usuario['ano_turma'] = turma[2]
             return True
         else:
             return False
@@ -70,12 +74,16 @@ def procurar_aluno(ra):
         aluno_selecionado['senha'] = aluno[2]
         aluno_selecionado['nome'] = aluno[3]
         aluno_selecionado['turma'] = aluno[4]
-        turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (aluno[4],)).fetchone()
-        aluno_selecionado['nome_turma'] = turma[1]
-        aluno_selecionado['ano_turma'] = turma[2]
+        if aluno[4]==0:
+            aluno_selecionado['nome_turma'] = "SEM TURMA"
+            aluno_selecionado['ano_turma'] = 0
+        else:
+            turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (aluno[4],)).fetchone()
+            aluno_selecionado['nome_turma'] = turma[1]
+            aluno_selecionado['ano_turma'] = turma[2]
         return True
     else:
-         return False
+        return False
 
 def procurar_turma(id):
     turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (id,)).fetchone()
@@ -90,12 +98,15 @@ def procurar_turma(id):
          return False
     
 def listar_alunos():
-     res = cursor.execute('SELECT * FROM alunos').fetchall()
-     alunos = []
-     for aluno in res:
-          turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (aluno[4],)).fetchone()
-          alunos.append(aluno+(turma[1], turma[2]))
-     return alunos
+    res = cursor.execute('SELECT * FROM alunos').fetchall()
+    alunos = []
+    for aluno in res:
+        if aluno[4]==0:
+            alunos.append(aluno+("SEM TURMA", 0))
+        else:
+            turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (aluno[4],)).fetchone()
+            alunos.append(aluno+(turma[1], turma[2]))
+    return alunos
 
 def listar_turmas():
      turmas = []
@@ -106,16 +117,21 @@ def listar_turmas():
      return turmas
 
 def editar_aluno(ra, senha, nome, turma):
-    cursor.execute('UPDATE alunos SET ra=?, senha=?, nome=?, turma=? WHERE id=?', (ra, senha, nome, turma, aluno_selecionado["id"]))
+    id_turma = int(turma)
+    cursor.execute('UPDATE alunos SET ra=?, senha=?, nome=?, turma=? WHERE id=?', (ra, senha, nome, id_turma, aluno_selecionado["id"]))
     con.commit()
     aluno_selecionado['ra'] = ra
     aluno_selecionado['senha'] = senha
     aluno_selecionado['nome'] = nome
-    if turma != aluno_selecionado['turma']:
-        aluno_selecionado['turma'] = turma
-        nova_turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (turma,)).fetchone()
-        aluno_selecionado['nome_turma'] = nova_turma[1]
-        aluno_selecionado['ano_turma'] = nova_turma[2]
+    if id_turma != aluno_selecionado['turma']:
+        aluno_selecionado['turma'] = id_turma
+        if id_turma==0:
+            aluno_selecionado['nome_turma'] = "SEM TURMA"
+            aluno_selecionado['ano_turma'] = 0
+        else:
+            nova_turma = cursor.execute('SELECT * FROM turmas WHERE id=?', (id_turma,)).fetchone()
+            aluno_selecionado['nome_turma'] = nova_turma[1]
+            aluno_selecionado['ano_turma'] = nova_turma[2]
     return True
     
 def excluir_aluno():
@@ -140,6 +156,9 @@ def editar_turma(nome, ano):
 def excluir_turma():
     con.commit()
     cursor.execute('DELETE FROM turmas WHERE id=?', (turma_selecionada["id"],))
+    cursor.execute('UPDATE alunos SET turma=0 WHERE turma=?', (turma_selecionada["id"],))
+    con.commit()
+    turma_selecionada["id"] = 0
     turma_selecionada['nome_curso'] = ""
     turma_selecionada['ano_inicio'] = 0
     turma_selecionada['alunos'] = ()
