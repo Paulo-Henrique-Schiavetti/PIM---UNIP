@@ -358,10 +358,13 @@ class SistemaEscolar(ctk.CTk):
         for turma in lista_turmas:
             texto = f"ID: {turma[0]} | {turma[1]} - {turma[2]}"
             ctk.CTkButton(lista_frame, text=texto, command=lambda idturma=turma[0]: self.acessar_turma(idturma), font=ctk.CTkFont(size=16, weight="bold"), fg_color="#7A7A7A", text_color="white").pack(fill="both")
-            for aluno in turma[3]:
-                texto = f" {aluno[1]} | {aluno[3]}"
-                ctk.CTkLabel(lista_frame, text=texto, anchor="w", font=ctk.CTkFont(size=14, weight="bold"), fg_color="#969696", text_color="white").pack(fill="both")
-        
+            if turma[3] == []:
+                ctk.CTkLabel(lista_frame, text=" SEM ALUNOS", anchor="w", font=ctk.CTkFont(size=14, weight="bold"), fg_color="#969696", text_color="white").pack(fill="both")
+            else:
+                for aluno in turma[3]:
+                    texto = f" {aluno[1]} | {aluno[3]}"
+                    ctk.CTkLabel(lista_frame, text=texto, anchor="w", font=ctk.CTkFont(size=14, weight="bold"), fg_color="#969696", text_color="white").pack(fill="both")
+            
         ctk.CTkLabel(frame, text="", height=15).pack()
 
         # botão de sair

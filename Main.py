@@ -109,12 +109,13 @@ def listar_alunos():
     return alunos
 
 def listar_turmas():
-     turmas = []
-     res = cursor.execute('SELECT * FROM turmas').fetchall()
-     for turma in res:
-          alunos = cursor.execute('SELECT * FROM alunos WHERE turma=?', (turma[0],)).fetchall()
-          turmas.append(turma+(alunos,))
-     return turmas
+    turmas = []
+    res = cursor.execute('SELECT * FROM turmas').fetchall()
+    for turma in res:
+        alunos = cursor.execute('SELECT * FROM alunos WHERE turma=?', (turma[0],)).fetchall()
+        turmas.append(turma+(alunos,))
+        
+    return turmas
 
 def editar_aluno(ra, senha, nome, turma):
     id_turma = int(turma)
